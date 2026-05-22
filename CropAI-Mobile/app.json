@@ -1,0 +1,53 @@
+{
+  "expo": {
+    "name": "CropAI",
+    "slug": "cropai-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "backgroundColor": "#050F08"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "CropAI needs camera access to capture crop leaf images for disease detection.",
+        "NSPhotoLibraryUsageDescription": "CropAI needs photo library access to select crop leaf images.",
+        "NSLocationWhenInUseUsageDescription": "CropAI uses your location to provide local weather and nearby supplier data.",
+        "NSMicrophoneUsageDescription": "CropAI needs microphone access for audio recording."
+      }
+    },
+    "android": {
+      "package": "com.cropai.mobile",
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "RECORD_AUDIO"
+      ],
+      "adaptiveIcon": {
+        "backgroundColor": "#050F08",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-image-picker",
+      "expo-location",
+      [
+        "expo-audio",
+        {
+          "microphonePermission": "Allow CropAI to access your microphone."
+        }
+      ]
+    ]
+  }
+}
+

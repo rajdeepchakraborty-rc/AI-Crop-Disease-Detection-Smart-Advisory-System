@@ -1,3 +1,5 @@
+<div id="top"></div> 
+
 # AI Crop Disease Detection System
 
 A cutting-edge Agricultural Intelligence Pipeline utilizing a 14-Agent orchestrated architecture. This system automatically identifies crop diseases from images, offers real-time weather integration, generates local audio advisories, runs What-If simulations, and maintains a "Farm Memory" of past detections for long-term tracking.
@@ -123,3 +125,20 @@ The Farm Memory Agent uses a local JSON database (`backend/database/farm_memory.
 - **DELETE** `/farm-history/{leaf_id}`: Clear all history for a leaf.
 
 *(These are automatically updated when you run a new analysis via the frontend dashboard!)*
+
+<!--Line-->
+<img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="900">
+
+##  Team
+
+| ![Rajdeep Chakraborty](https://avatars.githubusercontent.com/u/68934988?v=4&s=80) | ![Pritam Tung](https://avatars.githubusercontent.com/u/187090732?v=4&s=80) |![Krishnakanta Khamrui](https://avatars.githubusercontent.com/u/162899386?v=4&s=80) |
+|:--:|:--:|:--:|
+| **Rajdeep Chakraborty** <br> <sub>Team Leader</sub> <br> <sub>Frontend</sub> | **Pritam Tung** <br> <sub>Team Member</sub><br> <sub>Backend</sub> | **Krishnakanta Khamrui** <br> <sub>Team Member</sub><br> <sub>AI/ML</sub> |
+| [![LinkedIn](https://img.icons8.com/fluency/32/000000/linkedin.png)](https://www.linkedin.com/in/rajdeepchakraborty69/) | [![LinkedIn](https://img.icons8.com/fluency/32/000000/linkedin.png)](https://www.linkedin.com/in/pritam-t-545866266/) | [![LinkedIn](https://img.icons8.com/fluency/32/000000/linkedin.png)](https://www.linkedin.com/in/krishnakanta-khamrui-1341a7371/) |
+
+
+<div align="center">
+    <a href="#top">
+        <img src="https://img.shields.io/badge/Back%20to%20Top-000000?style=for-the-badge&logo=github&logoColor=white" alt="Back to Top">
+    </a>
+</div>

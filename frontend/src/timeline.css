@@ -1,0 +1,33 @@
+/* Timeline for HowItWorks */
+.timeline-container {
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px 0;
+}
+.timeline-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 20px;
+  width: 2px;
+  background: var(--border-bright);
+}
+.timeline-item {
+  position: relative;
+  padding-left: 60px;
+  margin-bottom: 40px;
+}
+.timeline-dot {
+  position: absolute;
+  top: 20px;
+  left: 11px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--bg-base);
+  border: 4px solid var(--green-500);
+  box-shadow: 0 0 15px var(--green-400);
+  z-index: 2;
+}

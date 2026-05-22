@@ -230,5 +230,65 @@
         }
       }
     ]
+  },
+  "LEAF-748573": {
+    "history": [
+      {
+        "date": "2026-05-22",
+        "disease": "Grape Black rot",
+        "confidence": 69.7,
+        "severity": "Moderate \ud83d\udfe1",
+        "treatment_type": "organic",
+        "location": {
+          "lat": 22.4765,
+          "lon": 88.0447
+        }
+      }
+    ]
+  },
+  "LEAF-C12798": {
+    "history": [
+      {
+        "date": "2026-05-22",
+        "disease": "Unknown",
+        "confidence": 0,
+        "severity": "Moderate \ud83d\udfe1",
+        "treatment_type": "organic",
+        "location": {
+          "lat": 22.4765,
+          "lon": 88.0447
+        }
+      }
+    ]
+  },
+  "LEAF-C7802D": {
+    "history": [
+      {
+        "date": "2026-05-22",
+        "disease": "Strawberry Leaf scorch",
+        "confidence": 97.8,
+        "severity": "Severe \ud83d\udd34",
+        "treatment_type": "organic",
+        "location": {
+          "lat": 22.4765,
+          "lon": 88.0447
+        }
+      }
+    ]
+  },
+  "LEAF-5F5F4A": {
+    "history": [
+      {
+        "date": "2026-05-22",
+        "disease": "Strawberry Leaf scorch",
+        "confidence": 71.3,
+        "severity": "Moderate \ud83d\udfe1",
+        "treatment_type": "organic",
+        "location": {
+          "lat": 22.4787,
+          "lon": 88.0926
+        }
+      }
+    ]
   }
 }

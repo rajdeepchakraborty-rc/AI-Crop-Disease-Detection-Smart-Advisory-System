@@ -1,0 +1,234 @@
+{
+  "LEAF-A1B2C3": {
+    "history": [
+      {
+        "date": "2024-11-10",
+        "disease": "Tomato Early Blight",
+        "confidence": 87,
+        "treatment_applied": "Copper-based fungicide spray",
+        "outcome": "Recovered in 12 days",
+        "weather_at_time": "High humidity 82%, Temp 28\u00c2\u00b0C"
+      }
+    ]
+  },
+  "LEAF-F9E8D7": {
+    "history": [
+      {
+        "date": "2025-01-22",
+        "disease": "Potato Late Blight",
+        "confidence": 91,
+        "treatment_applied": "Mancozeb fungicide + crop rotation",
+        "outcome": "Partial recovery, section lost",
+        "weather_at_time": "Rainy season, Humidity 90%"
+      }
+    ]
+  },
+  "LEAF-E09BFE": {
+    "history": [
+      {
+        "date": "2026-04-30",
+        "disease": "Squash Powdery mildew",
+        "confidence": 77.5,
+        "severity": "Moderate \ud83d\udfe1",
+        "treatment_type": "organic",
+        "location": {
+          "lat": 28.6139,
+          "lon": 77.209
+        }
+      }
+    ]
+  },
+  "LEAF-DDD1A3": {
+    "history": [
+      {
+        "date": "2026-05-01",
+        "disease": "Apple Apple scab",
+        "confidence": 54.9,
+        "severity": "Moderate \ud83d\udfe1",
+        "treatment_type": "chemical",
+        "location": {
+          "lat": 22.901469,
+          "lon": 88.39249
+        }
+      }
+    ]
+  },
+  "LEAF-14F75C": {
+    "history": [
+      {
+        "date": "2026-05-01",
+        "disease": "Tomato healthy",
+        "confidence": 98.5,
+        "severity": "Healthy \ud83d\udfe2",
+        "treatment_type": "organic",
+        "location": {
+          "lat": 22.9007,
+          "lon": 88.3921
+        }
+      }
+    ]
+  },
+  "LEAF-BF45A7": {
+    "history": [
+      {
+        "date": "2026-05-01",
+        "disease": "Squash Powdery mildew",
+        "confidence": 99.7,
+        "severity": "Severe \ud83d\udd34",
+        "treatment_type": "organic",
+        "location": {
+          "lat": 22.9007,
+          "lon": 88.3921
+        }
+      },
+      {
+        "date": "2026-05-17",
+        "disease": "Squash Powdery mildew",
+        "confidence": 99.7,
+        "severity": "Severe \ud83d\udd34",
+        "treatment_type": "organic",
+        "location": {
+          "lat": 22.9008,
+          "lon": 88.392
+        }
+      }
+    ]
+  },
+  "LEAF-206CBA": {
+    "history": [
+      {
+        "date": "2026-05-01",
+        "disease": "Tomato Septoria leaf spot",
+        "confidence": 82.5,
+        "severity": "Severe \ud83d\udd34",
+        "treatment_type": "chemical",
+        "location": {
+          "lat": 22.9007,
+          "lon": 88.3921
+        }
+      },
+      {
+        "date": "2026-05-01",
+        "disease": "Tomato Septoria leaf spot",
+        "confidence": 82.5,
+        "severity": "Severe \ud83d\udd34",
+        "treatment_type": "chemical",
+        "location": {
+          "lat": 22.9007,
+          "lon": 88.3921
+        }
+      },
+      {
+        "date": "2026-05-17",
+        "disease": "Tomato Septoria leaf spot",
+        "confidence": 82.5,
+        "severity": "Severe \ud83d\udd34",
+        "treatment_type": "organic",
+        "location": {
+          "lat": 22.9007,
+          "lon": 88.3923
+        }
+      }
+    ]
+  },
+  "LEAF-06391F": {
+    "history": [
+      {
+        "date": "2026-05-17",
+        "disease": "Apple Black rot",
+        "confidence": 96.8,
+        "severity": "Severe \ud83d\udd34",
+        "treatment_type": "organic",
+        "location": {
+          "lat": 22.9008,
+          "lon": 88.3921
+        }
+      },
+      {
+        "date": "2026-05-17",
+        "disease": "Apple Black rot",
+        "confidence": 96.8,
+        "severity": "Severe \ud83d\udd34",
+        "treatment_type": "organic",
+        "location": {
+          "lat": 22.9007,
+          "lon": 88.3923
+        }
+      },
+      {
+        "date": "2026-05-17",
+        "disease": "Apple Black rot",
+        "confidence": 96.8,
+        "severity": "Severe \ud83d\udd34",
+        "treatment_type": "organic",
+        "location": {
+          "lat": 22.9008,
+          "lon": 88.392
+        }
+      },
+      {
+        "date": "2026-05-21",
+        "disease": "Apple Black rot",
+        "confidence": 96.8,
+        "severity": "Severe \ud83d\udd34",
+        "treatment_type": "organic",
+        "location": {
+          "lat": 22.9008,
+          "lon": 88.392
+        }
+      },
+      {
+        "date": "2026-05-21",
+        "disease": "Apple Black rot",
+        "confidence": 96.8,
+        "severity": "Severe \ud83d\udd34",
+        "treatment_type": "organic",
+        "location": {
+          "lat": 22.9008,
+          "lon": 88.392
+        }
+      },
+      {
+        "date": "2026-05-21",
+        "disease": "Apple Black rot",
+        "confidence": 96.8,
+        "severity": "Severe \ud83d\udd34",
+        "treatment_type": "organic",
+        "location": {
+          "lat": 22.9008,
+          "lon": 88.3921
+        }
+      }
+    ]
+  },
+  "LEAF-1692DB": {
+    "history": [
+      {
+        "date": "2026-05-21",
+        "disease": "Strawberry healthy",
+        "confidence": 95.6,
+        "severity": "Healthy \ud83d\udfe2",
+        "treatment_type": "organic",
+        "location": {
+          "lat": 22.9007,
+          "lon": 88.3921
+        }
+      }
+    ]
+  },
+  "LEAF-65D3AF": {
+    "history": [
+      {
+        "date": "2026-05-22",
+        "disease": "Apple Cedar apple rust",
+        "confidence": 91.8,
+        "severity": "Severe \ud83d\udd34",
+        "treatment_type": "organic",
+        "location": {
+          "lat": 22.4765,
+          "lon": 88.0447
+        }
+      }
+    ]
+  }
+}

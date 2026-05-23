@@ -243,6 +243,17 @@
           "lat": 22.4765,
           "lon": 88.0447
         }
+      },
+      {
+        "date": "2026-05-23",
+        "disease": "Grape Black rot",
+        "confidence": 92.8,
+        "severity": "Severe \ud83d\udd34",
+        "treatment_type": "organic",
+        "location": {
+          "lat": 22.4765,
+          "lon": 88.0447
+        }
       }
     ]
   },

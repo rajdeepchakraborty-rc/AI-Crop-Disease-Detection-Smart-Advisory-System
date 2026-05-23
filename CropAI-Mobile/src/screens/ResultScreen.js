@@ -1,147 +1,297 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, TouchableOpacity,
-  Image, StatusBar, Platform, Dimensions,
+  StatusBar, Platform, Switch, Alert,
 } from 'react-native';
 import { COLORS, FONTS, SPACING, RADIUS, SHADOW } from '../constants/theme';
 import DiseaseCard   from '../components/DiseaseCard';
-import WeatherCard   from '../components/WeatherCard';
-import HeatmapViewer from '../components/HeatmapViewer';
-import AudioPlayer   from '../components/AudioPlayer';
 import SeverityMeter from '../components/SeverityMeter';
 import { staticUrl } from '../services/api';
 
-const { width } = Dimensions.get('window');
+// ─── Tappable feature card ────────────────────────────────────────
+function FeatureCard({ emoji, title, subtitle, onPress, accent }) {
+  return (
+    <TouchableOpacity style={[fc.card, { borderColor: accent ?? COLORS.border }]} onPress={onPress} activeOpacity={0.78}>
+      <View style={[fc.iconWrap, { backgroundColor: (accent ?? COLORS.accent) + '1A' }]}>
+        <Text style={fc.icon}>{emoji}</Text>
+      </View>
+      <View style={{ flex: 1 }}>
+        <Text style={[fc.title, { color: accent ?? COLORS.accent }]}>{title}</Text>
+        {subtitle ? <Text style={fc.sub} numberOfLines={2}>{subtitle}</Text> : null}
+      </View>
+      <Text style={[fc.arrow, { color: accent ?? COLORS.accent }]}>›</Text>
+    </TouchableOpacity>
+  );
+}
+const fc = StyleSheet.create({
+  card: {
+    marginHorizontal: SPACING.md, marginTop: SPACING.sm,
+    flexDirection: 'row', alignItems: 'center', gap: 12,
+    backgroundColor: COLORS.bgCard, borderRadius: RADIUS.lg,
+    borderWidth: 1, padding: 14, ...SHADOW.card,
+  },
+  iconWrap: { width: 46, height: 46, borderRadius: RADIUS.md, alignItems: 'center', justifyContent: 'center' },
+  icon:  { fontSize: 22 },
+  title: { fontFamily: FONTS.semiBold, fontSize: 14, marginBottom: 2 },
+  sub:   { fontFamily: FONTS.regular, fontSize: 11, color: COLORS.textMuted, lineHeight: 16 },
+  arrow: { fontFamily: FONTS.bold, fontSize: 22, paddingRight: 4 },
+});
 
+// ─── Section divider ──────────────────────────────────────────────
+function Divider({ label }) {
+  return (
+    <View style={dv.row}>
+      <View style={dv.line} />
+      <Text style={dv.label}>{label}</Text>
+      <View style={dv.line} />
+    </View>
+  );
+}
+const dv = StyleSheet.create({
+  row:   { flexDirection: 'row', alignItems: 'center', marginHorizontal: SPACING.md, marginTop: SPACING.md, gap: 8 },
+  line:  { flex: 1, height: 1, backgroundColor: COLORS.border },
+  label: { fontFamily: FONTS.regular, fontSize: 10, color: COLORS.textMuted, letterSpacing: 0.8 },
+});
+
+// ═══════════════════════════════════════════════════════════════════
+//  RESULT SCREEN — summary hub, each card navigates to detail screen
+// ═══════════════════════════════════════════════════════════════════
 export default function ResultScreen({ navigation, route }) {
   const { result } = route.params;
   const scrollRef  = useRef(null);
+  const [remindersEnabled, setRemindersEnabled] = useState(false);
 
-  // Extract fields from orchestrator response
-  const disease    = result?.disease_info          ?? {};
-  const severity   = result?.severity              ?? {};
-  const weather    = result?.weather               ?? {};
-  const forecast   = result?.forecast              ?? {};
-  const advisory   = result?.advisory              ?? {};
-  const whatif     = result?.whatif_simulation     ?? {};
-  const supply     = result?.supply_chain          ?? {};
-  const heatmapUrl = staticUrl(result?.heatmap_url ?? result?.xai?.heatmap_url);
-  const audioUrl   = staticUrl(result?.audio_url   ?? result?.voice?.audio_url);
+  // ── Disease ──────────────────────────────────────────────────────
+  const diseaseClass  = result?.disease_class ?? null;
+  const diseaseName   = result?.disease       ?? 'Unknown';
+  const rawConf       = result?.confidence    ?? 0;
+  const confidenceVal = rawConf > 1 ? rawConf : rawConf * 100;
+  const disease = { predicted_class: diseaseClass, disease: diseaseName, confidence: confidenceVal };
 
-  const confidence = disease?.confidence ?? 0;
-  const leafId     = result?.leaf_id ?? 'leaf';
+  // ── Severity ─────────────────────────────────────────────────────
+  const sevLevel = result?.severity_level ?? null;
+  const sevNote  = result?.risk_note      ?? null;
+  const sevObj   = result?.severity       ?? {};
+  const sevDmg   = sevObj?.damage_ratio   ?? null;
+  const sevPct   = sevDmg != null ? Math.round(sevDmg * 100) : null;
+  const sevColor = sevPct == null ? COLORS.textMuted
+                 : sevPct < 30   ? COLORS.success
+                 : sevPct < 60   ? COLORS.warning
+                 : COLORS.danger;
 
-  // Severity color
-  const sevPct   = severity?.damage_ratio ? Math.round(severity.damage_ratio * 100) : null;
-  const sevColor = sevPct == null ? COLORS.textMuted : sevPct < 30 ? COLORS.success : sevPct < 60 ? COLORS.warning : COLORS.danger;
+  // ── Treatment advisory ───────────────────────────────────────────
+  const advice      = result?.advice          ?? {};
+  const steps       = advice?.treatment_steps ?? result?.treatment_steps ?? [];
+  const precautions = advice?.precautions     ?? result?.precautions     ?? [];
+  const prevention  = advice?.prevention      ?? result?.prevention      ?? [];
+
+  // ── XAI ─────────────────────────────────────────────────────────
+  const heatmapUrl  = staticUrl(result?.heatmap_url ?? null);
+  const explanation = result?.explanation         ?? null;
+  const heatmapDesc = result?.heatmap_description ?? null;
+
+  // ── Weather ──────────────────────────────────────────────────────
+  const weather = result?.weather ?? {};
+
+  // ── 5-day microclimate forecast ──────────────────────────────────
+  const microclimate  = result?.microclimate_forecast ?? {};
+  const forecastData  = microclimate?.forecast        ?? [];
+  const forecastAlert = microclimate?.alert           ?? null;
+
+  // ── Supply chain ─────────────────────────────────────────────────
+  const supply = result?.supply_chain ?? {};
+  const shops  = supply?.shops        ?? supply?.nearest_suppliers ?? [];
+
+  // ── What-If ──────────────────────────────────────────────────────
+  const whatif     = result?.what_if_analysis ?? {};
+  const whatifText = whatif?.simulation_result ?? whatif?.result ?? null;
+
+  const leafId   = result?.leaf_id  ?? '—';
+  const location = result?.location ?? null;
+
+  // ── Reminder ─────────────────────────────────────────────────────
+  function toggleReminders(val) {
+    setRemindersEnabled(val);
+    if (val) {
+      Alert.alert('✅ Reminder Set!', 'You will receive a treatment reminder in 10 seconds.');
+      setTimeout(() => {
+        Alert.alert('🌱 CropAI Reminder', `Time to treat your ${diseaseName}! Apply your plan now.`);
+      }, 10000);
+    }
+  }
+
+  // ── Navigation ───────────────────────────────────────────────────
+  const goXai = () => navigation.navigate('XaiDetail', {
+    result: { heatmapUrl, explanation, heatmapDesc, diseaseName, confidence: confidenceVal },
+  });
+  const goTreatment = () => navigation.navigate('TreatmentDetail', {
+    diseaseName, steps, precautions, prevention,
+    treatmentType: result?.treatment_type ?? 'organic',
+    severity: sevLevel,
+  });
+  const goSupply = () => navigation.navigate('SupplyChainDetail', {
+    shops, diseaseName, location,
+  });
+  const goForecast = () => navigation.navigate('WeatherForecast', {
+    forecastData, alert: forecastAlert, diseaseName,
+  });
 
   return (
     <View style={styles.root}>
       <StatusBar barStyle="light-content" backgroundColor={COLORS.bg} />
 
-      {/* Fixed header */}
+      {/* ── Header ── */}
       <View style={styles.topBar}>
-        <TouchableOpacity onPress={() => navigation.navigate('Home')} style={styles.backBtn}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
           <Text style={styles.backIcon}>←</Text>
         </TouchableOpacity>
-        <Text style={styles.screenTitle}>Diagnosis Report</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('History')} style={styles.histBtn}>
+        <View style={{ alignItems: 'center' }}>
+          <Text style={styles.screenTitle}>Diagnosis Report</Text>
+          <Text style={styles.screenSub}>AI-Powered Analysis</Text>
+        </View>
+        <TouchableOpacity onPress={() => navigation.navigate('History', { leafId })} style={styles.histBtn}>
           <Text style={styles.histIcon}>📋</Text>
         </TouchableOpacity>
       </View>
 
       <ScrollView ref={scrollRef} showsVerticalScrollIndicator={false} contentContainerStyle={styles.scroll}>
 
-        {/* ── 1. Disease Card ── */}
-        <DiseaseCard disease={disease} confidence={confidence} />
+        {/* ── 1. DISEASE CARD ── */}
+        <DiseaseCard disease={disease} confidence={confidenceVal} />
 
-        {/* ── 2. Severity Meter ── */}
-        {sevPct != null && <SeverityMeter value={sevPct} color={sevColor} />}
-
-        {/* ── 3. Heatmap ── */}
-        {heatmapUrl && <HeatmapViewer url={heatmapUrl} />}
-
-        {/* ── 4. Voice Advisory ── */}
-        {audioUrl && <AudioPlayer url={audioUrl} language={result?.language ?? 'english'} />}
-
-        {/* ── 5. LLM Advisory ── */}
-        {(advisory?.recommendation || advisory?.organic_treatment || advisory?.chemical_treatment) && (
-          <View style={styles.card}>
-            <Text style={styles.cardTitle}>🤖  AI Treatment Advisory</Text>
-            {advisory.recommendation && (
-              <Text style={styles.advisoryText}>{advisory.recommendation}</Text>
-            )}
-            {advisory.organic_treatment && (
-              <View style={styles.treatmentBlock}>
-                <Text style={styles.treatLabel}>🌿 Organic</Text>
-                <Text style={styles.treatText}>{advisory.organic_treatment}</Text>
+        {/* ── 2. SEVERITY ── */}
+        {(sevLevel || sevNote || sevPct != null) && (
+          <View style={styles.sevCard}>
+            <View style={styles.sevRow}>
+              <Text style={styles.sevEmoji}>⚠️</Text>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.sevTitle}>Severity Analysis</Text>
+                {sevLevel && <Text style={[styles.sevLevel, { color: sevColor }]}>{sevLevel}</Text>}
+                {sevNote  && <Text style={styles.sevNote} numberOfLines={3}>{sevNote}</Text>}
               </View>
-            )}
-            {advisory.chemical_treatment && (
-              <View style={styles.treatmentBlock}>
-                <Text style={styles.treatLabel}>🧪 Chemical</Text>
-                <Text style={styles.treatText}>{advisory.chemical_treatment}</Text>
-              </View>
-            )}
+            </View>
+            {sevPct != null && <SeverityMeter value={sevPct} color={sevColor} />}
           </View>
         )}
 
-        {/* ── 6. Weather ── */}
-        {weather?.temperature != null && (
+        <Divider label="DETAILED REPORTS" />
+
+        {/* ── 3. XAI → XaiDetailScreen ── */}
+        <FeatureCard
+          emoji="🧠"
+          title="Explainable AI (Grad-CAM)"
+          subtitle={heatmapDesc ?? explanation ?? 'View heatmap and model attention analysis'}
+          onPress={goXai}
+          accent="#a78bfa"
+        />
+
+        {/* ── 4. TREATMENT → TreatmentDetailScreen ── */}
+        <FeatureCard
+          emoji="🤖"
+          title="AI Treatment Advisory"
+          subtitle={steps.length > 0
+            ? `${steps.length} treatment steps · ${precautions.length} precautions · ${prevention.length} prevention tips`
+            : 'Treatment plan not available'}
+          onPress={goTreatment}
+          accent={COLORS.accent}
+        />
+
+        {/* ── 5. SUPPLY CHAIN → SupplyChainDetailScreen ── */}
+        <FeatureCard
+          emoji="🗺️"
+          title="Nearest Agri-Suppliers"
+          subtitle={shops.length > 0
+            ? `${shops.length} shop${shops.length > 1 ? 's' : ''} found near you — tap to open in Maps`
+            : 'No suppliers found within 50 km'}
+          onPress={goSupply}
+          accent="#fb923c"
+        />
+
+        {/* ── 6. WEATHER FORECAST → WeatherForecastScreen ── */}
+        <FeatureCard
+          emoji="⛅"
+          title="5-Day Weather Forecast"
+          subtitle={forecastAlert
+            ? forecastAlert.substring(0, 90)
+            : forecastData.length > 0
+              ? `${forecastData.length}-day microclimate disease risk analysis`
+              : 'Forecast data not available'}
+          onPress={goForecast}
+          accent="#38bdf8"
+        />
+
+        <Divider label="SIMULATION & ENVIRONMENT" />
+
+        {/* ── 7. WHAT-IF inline ── */}
+        {whatifText && (
           <View style={styles.card}>
-            <Text style={styles.cardTitle}>🌤️  Weather Intelligence</Text>
-            <View style={styles.weatherGrid}>
-              <WeatherCard emoji="🌡️" label="Temperature" value={`${weather.temperature}°C`} color={COLORS.warning} />
-              <WeatherCard emoji="💧" label="Humidity"    value={`${weather.humidity}%`}      color={COLORS.info} />
-              {weather.rain_risk != null && (
-                <WeatherCard emoji="🌧️" label="Rain Risk" value={`${Math.round(weather.rain_risk * 100)}%`} color={COLORS.info} />
+            <Text style={styles.cardTitle}>💭  What-If Simulation Result</Text>
+            <Text style={styles.cardBody}>{whatifText}</Text>
+          </View>
+        )}
+
+        {/* ── 8. WEATHER inline summary ── */}
+        {(weather?.temperature != null || weather?.humidity != null) && (
+          <View style={styles.weatherCard}>
+            <Text style={styles.weatherTitle}>🌤️  Current Weather</Text>
+            {weather.city && <Text style={styles.weatherCity}>📍 {weather.city}</Text>}
+            <View style={styles.weatherRow}>
+              {weather.temperature != null && (
+                <View style={styles.weatherCell}>
+                  <Text style={styles.weatherEmoji}>🌡️</Text>
+                  <Text style={styles.weatherVal}>{weather.temperature}°C</Text>
+                  <Text style={styles.weatherLabel}>Temp</Text>
+                </View>
               )}
-              {weather.wind_speed != null && (
-                <WeatherCard emoji="💨" label="Wind"      value={`${weather.wind_speed} m/s`} color={COLORS.textSecondary} />
+              {weather.humidity != null && (
+                <View style={styles.weatherCell}>
+                  <Text style={styles.weatherEmoji}>💧</Text>
+                  <Text style={styles.weatherVal}>{weather.humidity}%</Text>
+                  <Text style={styles.weatherLabel}>Humidity</Text>
+                </View>
+              )}
+              {weather.rainfall != null && (
+                <View style={styles.weatherCell}>
+                  <Text style={styles.weatherEmoji}>🌧️</Text>
+                  <Text style={styles.weatherVal}>{weather.rainfall} mm</Text>
+                  <Text style={styles.weatherLabel}>Rainfall</Text>
+                </View>
               )}
             </View>
+            {weather.impact && <Text style={styles.weatherImpact}>{weather.impact}</Text>}
           </View>
         )}
 
-        {/* ── 7. What-If ── */}
-        {whatif?.simulation_result && (
-          <View style={styles.card}>
-            <Text style={styles.cardTitle}>💭  What-If Simulation</Text>
-            <Text style={styles.advisoryText}>{whatif.simulation_result}</Text>
-          </View>
-        )}
+        <Divider label="MANAGEMENT" />
 
-        {/* ── 8. Supply Chain ── */}
-        {supply?.nearest_suppliers?.length > 0 && (
-          <View style={styles.card}>
-            <Text style={styles.cardTitle}>🗺️  Nearest Agri-Suppliers</Text>
-            {supply.nearest_suppliers.slice(0, 3).map((s, i) => (
-              <View key={i} style={styles.supplierRow}>
-                <Text style={styles.supplierNum}>{i + 1}</Text>
-                <View style={{ flex: 1 }}>
-                  <Text style={styles.supplierName}>{s.name ?? 'Agri Store'}</Text>
-                  {s.distance_km != null && (
-                    <Text style={styles.supplierDist}>{s.distance_km.toFixed(1)} km away</Text>
-                  )}
-                </View>
-                <Text style={styles.supplierTag}>🏪</Text>
-              </View>
-            ))}
+        {/* ── 9. DAILY REMINDERS ── */}
+        <View style={styles.card}>
+          <View style={styles.remRow}>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.cardTitle}>🔔  Daily Treatment Reminders</Text>
+              <Text style={styles.cardBody}>Get automated alerts to apply your treatment plan on time.</Text>
+            </View>
+            <Switch
+              value={remindersEnabled}
+              onValueChange={toggleReminders}
+              trackColor={{ false: COLORS.bgCardAlt, true: COLORS.primary }}
+              thumbColor={remindersEnabled ? COLORS.accent : '#555'}
+            />
           </View>
-        )}
+        </View>
 
-        {/* ── 9. Leaf ID ── */}
-        <View style={styles.leafIdCard}>
-          <Text style={styles.leafIdLabel}>Leaf ID</Text>
+        {/* ── 10. LEAF ID ── */}
+        <View style={styles.leafIdRow}>
+          <Text style={styles.leafIdLabel}>🍃 Leaf ID</Text>
           <Text style={styles.leafIdValue}>{leafId}</Text>
         </View>
 
-        {/* Analyze again */}
-        <TouchableOpacity style={styles.analyzeAgainBtn} onPress={() => navigation.navigate('Upload')} activeOpacity={0.85}>
-          <Text style={styles.analyzeAgainText}>📷  Analyze Another Crop</Text>
+        {/* ── CTA ── */}
+        <TouchableOpacity style={styles.ctaBtn} onPress={() => navigation.navigate('Upload')} activeOpacity={0.85}>
+          <Text style={styles.ctaText}>📷  Analyze Another Crop</Text>
         </TouchableOpacity>
 
-        <View style={{ height: 40 }} />
+        <View style={{ height: 50 }} />
       </ScrollView>
     </View>
   );
@@ -158,56 +308,62 @@ const styles = StyleSheet.create({
     paddingBottom: SPACING.sm,
     borderBottomWidth: 1, borderBottomColor: COLORS.border,
   },
-  backBtn:     { width: 40, height: 40, alignItems: 'flex-start', justifyContent: 'center' },
+  backBtn:     { width: 40, height: 40, justifyContent: 'center' },
   backIcon:    { fontSize: 24, color: COLORS.accent },
   screenTitle: { fontFamily: FONTS.bold, fontSize: 17, color: COLORS.textPrimary },
+  screenSub:   { fontFamily: FONTS.regular, fontSize: 10, color: COLORS.textMuted, letterSpacing: 0.5 },
   histBtn:     { width: 40, height: 40, alignItems: 'flex-end', justifyContent: 'center' },
   histIcon:    { fontSize: 20 },
 
+  sevCard: {
+    marginHorizontal: SPACING.md, marginTop: SPACING.md,
+    backgroundColor: COLORS.bgCard, borderRadius: RADIUS.lg,
+    borderWidth: 1, borderColor: COLORS.border, padding: SPACING.md, ...SHADOW.card,
+  },
+  sevRow:    { flexDirection: 'row', alignItems: 'flex-start', gap: 10, marginBottom: 10 },
+  sevEmoji:  { fontSize: 22, marginTop: 2 },
+  sevTitle:  { fontFamily: FONTS.semiBold, fontSize: 14, color: COLORS.accent, marginBottom: 2 },
+  sevLevel:  { fontFamily: FONTS.bold, fontSize: 14, marginBottom: 2 },
+  sevNote:   { fontFamily: FONTS.regular, fontSize: 11, color: COLORS.textSecondary, lineHeight: 17 },
+
   card: {
     marginHorizontal: SPACING.md, marginTop: SPACING.md,
-    backgroundColor: COLORS.bgCard,
-    borderRadius: RADIUS.lg, borderWidth: 1, borderColor: COLORS.border,
-    padding: SPACING.md, ...SHADOW.card,
+    backgroundColor: COLORS.bgCard, borderRadius: RADIUS.lg,
+    borderWidth: 1, borderColor: COLORS.border, padding: SPACING.md, ...SHADOW.card,
   },
-  cardTitle: { fontFamily: FONTS.semiBold, fontSize: 14, color: COLORS.accent, marginBottom: SPACING.sm },
+  cardTitle: { fontFamily: FONTS.semiBold, fontSize: 14, color: COLORS.accent, marginBottom: 8 },
+  cardBody:  { fontFamily: FONTS.regular,  fontSize: 12, color: COLORS.textSecondary, lineHeight: 19 },
+  remRow:    { flexDirection: 'row', alignItems: 'center', gap: SPACING.sm },
 
-  advisoryText: { fontFamily: FONTS.regular, fontSize: 13, color: COLORS.textSecondary, lineHeight: 20 },
-
-  treatmentBlock: {
-    marginTop: SPACING.sm, backgroundColor: COLORS.accentSoft,
-    borderRadius: RADIUS.md, padding: SPACING.sm,
-    borderWidth: 1, borderColor: COLORS.border,
+  weatherCard: {
+    marginHorizontal: SPACING.md, marginTop: SPACING.md,
+    backgroundColor: COLORS.bgCard, borderRadius: RADIUS.lg,
+    borderWidth: 1, borderColor: COLORS.border, padding: SPACING.md, ...SHADOW.card,
   },
-  treatLabel: { fontFamily: FONTS.semiBold, fontSize: 12, color: COLORS.accent, marginBottom: 4 },
-  treatText:  { fontFamily: FONTS.regular,  fontSize: 12, color: COLORS.textSecondary, lineHeight: 18 },
+  weatherTitle:  { fontFamily: FONTS.semiBold, fontSize: 14, color: COLORS.accent, marginBottom: 4 },
+  weatherCity:   { fontFamily: FONTS.regular, fontSize: 11, color: COLORS.textMuted, marginBottom: 10 },
+  weatherRow:    { flexDirection: 'row', justifyContent: 'space-around' },
+  weatherCell:   { alignItems: 'center', gap: 3 },
+  weatherEmoji:  { fontSize: 22 },
+  weatherVal:    { fontFamily: FONTS.bold, fontSize: 16, color: COLORS.textPrimary },
+  weatherLabel:  { fontFamily: FONTS.regular, fontSize: 10, color: COLORS.textMuted },
+  weatherImpact: { fontFamily: FONTS.regular, fontSize: 12, color: COLORS.textSecondary, marginTop: 10, lineHeight: 18 },
 
-  weatherGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: SPACING.sm },
-
-  supplierRow: {
-    flexDirection: 'row', alignItems: 'center', gap: 10,
-    paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: COLORS.border,
-  },
-  supplierNum:  { fontFamily: FONTS.bold,    fontSize: 16, color: COLORS.textMuted, width: 20 },
-  supplierName: { fontFamily: FONTS.semiBold, fontSize: 13, color: COLORS.textPrimary },
-  supplierDist: { fontFamily: FONTS.regular,  fontSize: 11, color: COLORS.textMuted },
-  supplierTag:  { fontSize: 18 },
-
-  leafIdCard: {
+  leafIdRow: {
     marginHorizontal: SPACING.md, marginTop: SPACING.md,
     flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
     backgroundColor: COLORS.bgCardAlt, borderRadius: RADIUS.md,
-    paddingHorizontal: SPACING.md, paddingVertical: 10,
+    paddingHorizontal: SPACING.md, paddingVertical: 12,
     borderWidth: 1, borderColor: COLORS.border,
   },
-  leafIdLabel: { fontFamily: FONTS.regular,  fontSize: 12, color: COLORS.textMuted },
+  leafIdLabel: { fontFamily: FONTS.regular, fontSize: 12, color: COLORS.textMuted },
   leafIdValue: { fontFamily: FONTS.semiBold, fontSize: 12, color: COLORS.textSecondary },
 
-  analyzeAgainBtn: {
+  ctaBtn: {
     marginHorizontal: SPACING.md, marginTop: SPACING.lg,
-    backgroundColor: COLORS.bgCard,
-    borderRadius: RADIUS.full, borderWidth: 1.5, borderColor: COLORS.borderBright,
-    paddingVertical: 14, alignItems: 'center',
+    backgroundColor: COLORS.accent + '18', borderRadius: RADIUS.full,
+    borderWidth: 1.5, borderColor: COLORS.accent,
+    paddingVertical: 15, alignItems: 'center',
   },
-  analyzeAgainText: { fontFamily: FONTS.semiBold, fontSize: 14, color: COLORS.accent },
+  ctaText: { fontFamily: FONTS.semiBold, fontSize: 14, color: COLORS.accent },
 });

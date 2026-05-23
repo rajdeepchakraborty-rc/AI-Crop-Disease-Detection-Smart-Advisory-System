@@ -350,14 +350,22 @@ npm install
 ```
 
 #### 2. Start Expo Development Server
+Write the following command under the backend directory:
 ```bash
-npm start
+npx localtunnel --port 8000
 ```
 
-#### 3. Run on Device
-- **Android**: Press `a` and follow prompts
-- **iOS**: Press `i` and follow prompts
-- **Web**: Press `w` to run in web browser
+This generates a BASE_URL. Copy and paste the BASE_URL under the: 
+```export const BASE_URL = '<your_base_url>';```
+at
+`CropAI-Mobile/src/services/api.js`
+
+Finally run the below command under the CropAI-Mobile directory:
+```
+npx expo start --tunnel
+```
+
+This generates a QR code that can be scanned by installing the **Expo Go** app to view the app.
 
 ---
 

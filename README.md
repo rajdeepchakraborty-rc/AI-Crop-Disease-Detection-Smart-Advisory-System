@@ -25,10 +25,8 @@
 - [Scripts](#scripts)
 - [Performance & Optimizations](#performance--optimizations)
 - [Troubleshooting](#troubleshooting)
-- [Future Improvements](#future-improvements)
 - [Contributing Guidelines](#contributing-guidelines)
-- [License](#license)
-- [Author](#author)
+- [Team](#team)
 - [Acknowledgements](#acknowledgements)
 
 ---

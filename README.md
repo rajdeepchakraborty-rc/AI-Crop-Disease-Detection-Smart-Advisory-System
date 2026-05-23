@@ -31,7 +31,7 @@
 
 ---
 
-## 🎯 Project Description
+##  Project Description
 
 **AI Crop Disease Detection System** is a comprehensive agricultural intelligence platform designed to empower farmers and agricultural professionals with AI-driven insights. The system automatically identifies crop diseases from leaf images, provides real-time weather context, generates actionable treatment recommendations, and maintains a persistent farm memory for long-term tracking.
 
@@ -59,7 +59,7 @@ This platform bridges the gap between traditional farming and modern AI/ML techn
 
 ---
 
-## ✨ Features
+##  Features
 
 ### Core Intelligence
 - **🤖 14-Agent Sequential Pipeline**: Fully orchestrated AI workflow from image processing to output generation
@@ -98,7 +98,7 @@ This platform bridges the gap between traditional farming and modern AI/ML techn
 
 ---
 
-## 🛠 Tech Stack
+##  Tech Stack
 
 ### Backend
 | Category | Technology |
@@ -144,7 +144,7 @@ This platform bridges the gap between traditional farming and modern AI/ML techn
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 AI Crop Disease/
@@ -245,7 +245,7 @@ AI Crop Disease/
 
 ---
 
-## 📦 Installation Guide
+##  Installation Guide
 
 ### Prerequisites
 - **Node.js**: v18.0.0 or higher
@@ -359,7 +359,7 @@ npm start
 
 ---
 
-## 🔐 Environment Variables
+##  Environment Variables
 
 Create a `.env` file in the `backend/` directory with the following variables:
 
@@ -391,7 +391,7 @@ Create a `.env` file in the `backend/` directory with the following variables:
 
 ---
 
-## 🚀 Usage
+##  Usage
 
 ### 1. Web Dashboard (Recommended)
 
@@ -479,7 +479,7 @@ curl -X POST "http://localhost:8000/analyze" \
 
 ---
 
-## 🔌 API Endpoints
+##  API Endpoints
 
 ### Main Analysis Endpoint
 
@@ -563,7 +563,7 @@ language: english
 
 ---
 
-## 🏗 System Architecture
+##  System Architecture
 
 ### 14-Agent Sequential Pipeline
 
@@ -693,7 +693,7 @@ context = {
 
 ---
 
-## 💾 Database Schema
+##  Database Schema
 
 ### Farm Memory (JSON Structure)
 
@@ -751,7 +751,7 @@ context = {
 
 ---
 
-## 📜 Scripts
+##  Scripts
 
 ### Frontend Scripts
 
@@ -808,7 +808,7 @@ npm run web
 
 ---
 
-## ⚡ Performance & Optimizations
+##  Performance & Optimizations
 
 ### Backend Optimizations
 - **Async Processing**: AsyncIO and async/await for non-blocking I/O
@@ -840,7 +840,7 @@ npm run web
 
 ---
 
-## 🔧 Troubleshooting
+##  Troubleshooting
 
 ### Backend Issues
 
@@ -906,7 +906,7 @@ npm run build
 
 ---
 
-## 👥 Contributing Guidelines
+##  Contributing Guidelines
 
 We welcome contributions! Please follow these guidelines:
 
@@ -945,7 +945,7 @@ We welcome contributions! Please follow these guidelines:
 
 ---
 
-## 🙏 Acknowledgements
+##  Acknowledgements
 
 ### Research & Inspiration
 - **PlantVillage Dataset**: Crop disease classification dataset

@@ -2,22 +2,33 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { COLORS, FONTS, SPACING, RADIUS, SHADOW } from '../constants/theme';
 
-// Maps disease class name to readable format and emoji
+// Maps an ML class key (e.g. "Grape___Black_rot") to a readable name + emoji.
+// Also handles plain names like "Grape Black rot" gracefully (no Unknown fallback).
 function formatDisease(raw) {
-  if (!raw) return { name: 'Unknown', plant: '', emoji: '🌿' };
-  const parts  = raw.split('___');
-  const plant   = parts[0]?.replace(/_/g, ' ') ?? '';
-  const disease = parts[1]?.replace(/_/g, ' ') ?? '';
-  const isHealthy = disease.toLowerCase() === 'healthy';
-  const emoji = isHealthy ? '✅' : '🦠';
-  return { name: isHealthy ? 'Healthy' : disease, plant, emoji, isHealthy };
+  if (!raw || raw === 'Unknown') return { name: 'Unknown', plant: '', emoji: '🌿' };
+
+  if (raw.includes('___')) {
+    // Standard PlantVillage key format
+    const parts    = raw.split('___');
+    const plant    = parts[0]?.replace(/_/g, ' ') ?? '';
+    const disease  = parts[1]?.replace(/_/g, ' ') ?? '';
+    const isHealthy = disease.toLowerCase() === 'healthy';
+    return { name: isHealthy ? 'Healthy' : disease || raw, plant, emoji: isHealthy ? '✅' : '🦠', isHealthy };
+  }
+
+  // Plain display name (e.g. "Grape Black rot") — show it as-is
+  const isHealthy = raw.toLowerCase().includes('healthy');
+  return { name: raw, plant: '', emoji: isHealthy ? '✅' : '🦠', isHealthy };
 }
 
 export default function DiseaseCard({ disease, confidence }) {
-  const raw    = disease?.predicted_class ?? disease?.class_name ?? disease?.disease;
+  // Prefer the raw ML class key (has ___ separator) for accurate formatting.
+  // Fallback chain: predicted_class → disease_class → plain disease string
+  const raw    = disease?.predicted_class ?? disease?.disease_class ?? disease?.disease;
   const parsed = formatDisease(raw);
-  const pct    = confidence != null ? Math.round(Number(confidence) * 100) : null;
-  const conf   = pct ?? (disease?.confidence_pct != null ? Math.round(disease.confidence_pct) : null);
+
+  // confidence is expected in 0-100 range from ResultScreen
+  const conf = confidence != null ? Math.round(Number(confidence)) : null;
 
   const borderColor = parsed.isHealthy ? COLORS.success : COLORS.danger;
   const bgColor     = parsed.isHealthy ? 'rgba(34,197,94,0.10)' : 'rgba(239,68,68,0.10)';

@@ -7,11 +7,15 @@ import axios from 'axios';
 //                        Run `ipconfig` on Windows, look for IPv4
 //                        e.g.  'http://192.168.1.5:8000'
 // ─────────────────────────────────────────────────────────────────
-export const BASE_URL = 'http://10.104.3.42:8000';
+export const BASE_URL = 'https://curly-heads-attack.loca.lt';
 
 const api = axios.create({
   baseURL: BASE_URL,
   timeout: 120000,   // 2 min — AI pipeline can be slow
+  headers: {
+    'Bypass-Tunnel-Reminder': 'true',
+    'User-Agent': 'CropAI-Mobile'
+  }
 });
 
 // ─── Core: Analyze a crop image ──────────────────────────────────

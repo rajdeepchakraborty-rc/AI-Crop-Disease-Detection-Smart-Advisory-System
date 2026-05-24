@@ -33,7 +33,7 @@ class MasterOrchestrator:
             ("8. Microclimate Forecast", MicroclimateForecastAgent()),
             ("9. Advisory LLM",            AdvisoryLLMAgent()),
             ("10. What-If Simulation",      WhatIfSimulationAgent()),
-            ("1. Voice Generator",        VoiceGeneratorAgent()),
+            ("11. Voice Generator",        VoiceGeneratorAgent()),
             ("12. Supply Chain",         SupplyChainAgent()),
             ("13. Report Generator",       ReportGeneratorAgent()),
             ("14. Response Builder",       ResponseBuilderAgent()),

@@ -234,50 +234,6 @@
   "LEAF-748573": {
     "history": [
       {
-        "date": "2026-05-22",
-        "disease": "Grape Black rot",
-        "confidence": 69.7,
-        "severity": "Moderate \ud83d\udfe1",
-        "treatment_type": "organic",
-        "location": {
-          "lat": 22.4765,
-          "lon": 88.0447
-        }
-      },
-      {
-        "date": "2026-05-23",
-        "disease": "Grape Black rot",
-        "confidence": 92.8,
-        "severity": "Severe \ud83d\udd34",
-        "treatment_type": "organic",
-        "location": {
-          "lat": 22.4765,
-          "lon": 88.0447
-        }
-      },
-      {
-        "date": "2026-05-23",
-        "disease": "Grape Black rot",
-        "confidence": 92.8,
-        "severity": "Severe \ud83d\udd34",
-        "treatment_type": "organic",
-        "location": {
-          "lat": 22.4765,
-          "lon": 88.0447
-        }
-      },
-      {
-        "date": "2026-05-23",
-        "disease": "Grape Black rot",
-        "confidence": 92.8,
-        "severity": "Severe \ud83d\udd34",
-        "treatment_type": "organic",
-        "location": {
-          "lat": 22.4765,
-          "lon": 88.0447
-        }
-      },
-      {
         "date": "2026-05-23",
         "disease": "Grape Black rot",
         "confidence": 92.8,
@@ -341,6 +297,50 @@
         "location": {
           "lat": 22.6816,
           "lon": 88.3448
+        }
+      },
+      {
+        "date": "2026-05-24",
+        "disease": "Grape Black rot",
+        "confidence": 92.8,
+        "severity": "Severe \ud83d\udd34",
+        "treatment_type": "organic",
+        "location": {
+          "lat": 22.6816,
+          "lon": 88.3448
+        }
+      },
+      {
+        "date": "2026-05-25",
+        "disease": "Grape Black rot",
+        "confidence": 92.8,
+        "severity": "Severe \ud83d\udd34",
+        "treatment_type": "organic",
+        "location": {
+          "lat": 22.6816,
+          "lon": 88.3448
+        }
+      },
+      {
+        "date": "2026-05-25",
+        "disease": "Grape Black rot",
+        "confidence": 92.8,
+        "severity": "Severe \ud83d\udd34",
+        "treatment_type": "organic",
+        "location": {
+          "lat": 22.47627143775248,
+          "lon": 88.04437726733865
+        }
+      },
+      {
+        "date": "2026-05-25",
+        "disease": "Grape Black rot",
+        "confidence": 92.8,
+        "severity": "Severe \ud83d\udd34",
+        "treatment_type": "organic",
+        "location": {
+          "lat": 22.47627143775248,
+          "lon": 88.04437726733865
         }
       }
     ]
@@ -382,6 +382,17 @@
         "location": {
           "lat": 22.4765,
           "lon": 88.0447
+        }
+      },
+      {
+        "date": "2026-05-25",
+        "disease": "Strawberry Leaf scorch",
+        "confidence": 100.0,
+        "severity": "Severe \ud83d\udd34",
+        "treatment_type": "organic",
+        "location": {
+          "lat": 22.6816,
+          "lon": 88.3448
         }
       }
     ]

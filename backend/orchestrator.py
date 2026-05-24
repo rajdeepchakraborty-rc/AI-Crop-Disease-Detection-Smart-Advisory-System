@@ -30,13 +30,13 @@ class MasterOrchestrator:
             ("5. Leaf Signature",          LeafSignatureAgent()),
             ("6. Farm Memory",             FarmMemoryAgent()),
             ("7. Weather Intelligence",    WeatherIntelligenceAgent()),
-            ("7.5. Microclimate Forecast", MicroclimateForecastAgent()),
-            ("8. Advisory LLM",            AdvisoryLLMAgent()),
-            ("9. What-If Simulation",      WhatIfSimulationAgent()),
-            ("10. Voice Generator",        VoiceGeneratorAgent()),
-            ("10.5. Supply Chain",         SupplyChainAgent()),
-            ("11. Report Generator",       ReportGeneratorAgent()),
-            ("12. Response Builder",       ResponseBuilderAgent()),
+            ("8. Microclimate Forecast", MicroclimateForecastAgent()),
+            ("9. Advisory LLM",            AdvisoryLLMAgent()),
+            ("10. What-If Simulation",      WhatIfSimulationAgent()),
+            ("1. Voice Generator",        VoiceGeneratorAgent()),
+            ("12. Supply Chain",         SupplyChainAgent()),
+            ("13. Report Generator",       ReportGeneratorAgent()),
+            ("14. Response Builder",       ResponseBuilderAgent()),
         ]
 
     async def run(self, input_data: dict) -> dict:
